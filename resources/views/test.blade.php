@@ -2,9 +2,13 @@
 
 @section('content')
 
-<div class="container">
-</div>
+  <div id="app">
+    <passport-clients></passport-clients>
+    <hr/>
+    <passport-authorized-clients></passport-authorized-clients>
+    <hr/>
+    <passport-personal-access-tokens></passport-personal-access-tokens>
+  </div>
+
 @endsection
-<script type="text/javascript">
-  console.log($('.container'))
-</script>
+

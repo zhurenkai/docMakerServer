@@ -17,7 +17,7 @@ class ApiController extends Controller
     public function store(Request $request)
     {
         $files = $_FILES;
-         print_r($request->file('ff'));exit;
-        return response($request);
+         echo  json_encode($request->all());
+
     }
 }
