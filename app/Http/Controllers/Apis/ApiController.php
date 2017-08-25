@@ -16,8 +16,7 @@ class ApiController extends Controller
 
     public function store(Request $request)
     {
-        $files = $_FILES;
-         echo  json_encode($request->all());
+        var_dump( Api::where('user_id',1)->first());
 
     }
 }
