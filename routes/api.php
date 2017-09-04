@@ -13,4 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->resource('api','Apis\ApiController');
+Route::group(['middleware'=>'auth:api'],function(){
+    // 资源路由
+    Route::resource('key-statement','Apis\KeyStatementController');
+
+    //非资源路由
+    Route::group([],function(){
+        Route::get('get-by-project-id','Apis\HostController@getHostsByProjectId');
+    });
+});
+
+
