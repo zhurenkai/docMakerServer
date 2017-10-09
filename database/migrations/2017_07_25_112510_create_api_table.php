@@ -16,9 +16,9 @@ class CreateApiTable extends Migration
         Schema::create('apis', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->string('host');
+            $table->string('name');
             $table->integer('module_id');
-            $table->string('dir');
+            $table->string('uri');
             $table->string('method');
             $table->string('response_demo');
             $table->string('description');
