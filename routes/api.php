@@ -19,9 +19,16 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::resource('project-host', 'Host\ProjectHostController');
     Route::resource('user-project', 'Project\UserProjectController');
     Route::resource('apis', 'Apis\ApiCOntroller');
+
     //非资源路由
-    Route::group([], function () {
-        Route::get('user-info', 'Auth\UserController@userInfo');
+    Route::group(['namespace'=>'Auth'], function () {
+        Route::get('user-info', 'UserController@userInfo');
+    });
+    Route::group(['prefix'=>'doc','namespace'=>'Doc'],function(){
+        Route::post('generate','DocController@generate');
+    });
+    Route::group(['prefix'=>'key','namespace'=>'Apis'],function(){
+        Route::post('store-many','KeyStatementController@storeMany');
     });
 });
 

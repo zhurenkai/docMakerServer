@@ -31,7 +31,7 @@ class KeyStatementController
             return response('缺失key');
         }
         if (!$project_id = $request->get('project_id')) {
-            return response('缺失project_id');
+            return response('缺少project_id');
         }
         if (!$project_id = $request->get('statement')) {
             return response('缺少描述');
@@ -48,9 +48,13 @@ class KeyStatementController
      * 从数据库批量导入
      *
      */
-    public function storeMany()
+    public function storeMany(Request $request)
     {
-
+        $list = $request->get('list');
+       // return response()->success($list);
+//        dd($list[0]);
+        $res = KeyStatement::insert($list);
+        return response()->success($res);
     }
 
 }

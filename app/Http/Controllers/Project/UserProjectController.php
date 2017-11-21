@@ -26,4 +26,6 @@ class UserProjectController extends Controller
         $user_id = auth()->id();
         return Project::where('user_id',$user_id)->get();
     }
+
+    public function store(){}
 }
