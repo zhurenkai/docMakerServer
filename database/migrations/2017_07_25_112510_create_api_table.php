@@ -17,10 +17,10 @@ class CreateApiTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('name');
-            $table->integer('module_id');
-            $table->string('uri');
-            $table->string('method');
-            $table->string('response_demo');
+            $table->integer('module_id');;
+            $table->string('method')->default('');
+            $table->string('path')->defaulf('');
+            $table->string('response_demo')->nullable();
             $table->string('description');
             $table->timestamps();
         });

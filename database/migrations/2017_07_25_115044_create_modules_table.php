@@ -17,8 +17,7 @@ class CreateModulesTable extends Migration
             $table->increments('id');
             $table->integer('project_id');
             $table->integer('user_id');
-            $table->integer('name');
-            $table->string('title');
+            $table->string('name');
             $table->string('description');
             $table->timestamps();
         });
