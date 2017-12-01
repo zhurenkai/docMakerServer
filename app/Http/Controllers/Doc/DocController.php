@@ -54,7 +54,7 @@ class DocController extends Controller
             // 数组的情况
             if (is_array($v)) {
                 // 索引数组的并且是多维数组（如果数组里面的值类型不一样，就该去反思，写的什么鬼接口）
-                if (is_array($v[0]) && array_keys($v) == array_keys(array_keys($v))) {
+                if (is_array(end($v)) && array_keys($v) == array_keys(array_keys($v))) {
                     $this->resopnseStatements($v[0], $res);
                 } // 关联数组数组
                 else {

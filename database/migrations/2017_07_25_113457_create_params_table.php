@@ -15,13 +15,12 @@ class CreateParamsTable extends Migration
     {
         Schema::create('params', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('param_id');
             $table->integer('api_id');
             $table->string('name');
             $table->string('type');
-            $table->string('title');
+            $table->string('title')->default('');
             $table->tinyInteger('required');
-            $table->string('description');
+            $table->string('description')->default('');
             $table->timestamps();
         });
     }
