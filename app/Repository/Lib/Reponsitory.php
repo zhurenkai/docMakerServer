@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\DB;
 
 class Repository
 {
+    protected $repo;
     protected $model;
-    public function __construct($model)
+    public function __construct()
     {
-          $this->model = $model;
     }
 
     public function updateMany($list,$condition)

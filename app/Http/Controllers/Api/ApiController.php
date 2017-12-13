@@ -6,12 +6,18 @@ use App\Model\Api;
 use App\Model\Host;
 use App\Model\Module;
 use App\Model\Param;
-use App\Repository\Param\ParamRepo;
+use App\Repository\Api\Param as ParamRepo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ApiController extends Controller
 {
+    protected $param;
+    public function __construct(ParamRepo $param)
+    {
+        $this->param = $param;
+    }
+
     public function index()
     {
         return 1;
@@ -74,10 +80,12 @@ class ApiController extends Controller
          $path = $request->get('path');
          $method = $request->get('method');
          $params = $request->get('params');
+         if(!$path){
+             return response()->error(2001);
+         }
          $api->path = $path;
          $api->method = $method;
          $api->save();
-         $param_repo = new ParamRepo();
          list($update_params,$store_params) = array_separate($params,function($v){
              return isset($v['id']);
          });
@@ -85,8 +93,12 @@ class ApiController extends Controller
              $value['required'] = $value['required'] ? 1:0;
              $value['is_use'] = $value['is_use'] ? 1:0;
          });
+         $current_params = $api->params()->pluck('id')->toArray();
+         $old_params = array_column($update_params,'id');
+         $delete_params = array_diff($current_params,$old_params);
+         Param::destroy($delete_params);
          if(!empty($update_params)){
-             $param_repo->updateMany($update_params,'id');
+             $this->param->updateMany($update_params,'id');
 
          }
          if(!empty($store_params)){

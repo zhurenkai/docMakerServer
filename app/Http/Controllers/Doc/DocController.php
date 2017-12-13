@@ -15,7 +15,7 @@ class DocController extends Controller
         $query_params = $request->get('queryParam');
         $form_data = $request->get('formParam');
         $project_id = $request->get('project_id');
-        $doc = [];
+        $doc['params'] = [];
 
         foreach ($query_params as $index => $value) {
             $info = $this->getStatement($value['key']);
@@ -24,14 +24,14 @@ class DocController extends Controller
         }
 
         foreach ($form_data as $index => $value) {
-            $info = $this->getStatement($value['k']);
+            $info = $this->getStatement($value['name']);
             $info['required'] = $value['required'];
             $doc['params'][] = $info;
         }
 
         $response_data = $request->get('response');
         if (is_array($response_data)) {
-            $doc['response'] = $this->resopnseStatements($response_data);
+            $doc['response'] = $this->jsonStatements($response_data);
         }
         return response()->success($doc);
     }
@@ -43,22 +43,22 @@ class DocController extends Controller
      * @param array $res
      * @return array
      */
-    private function resopnseStatements($response_data, &$res = [])
+    private function jsonStatements($response_data, &$res = [])
     {
 
         foreach ($response_data as $k => $v) {
             // 用key过滤重复的参数
-            if (!key_exists($k, $res)) {
+            if (!key_exists($k, $res) && !is_int($k)) {
                 $res[$k] = $this->getStatement($k);
             }
             // 数组的情况
             if (is_array($v)) {
                 // 索引数组的并且是多维数组（如果数组里面的值类型不一样，就该去反思，写的什么鬼接口）
                 if (is_array(end($v)) && array_keys($v) == array_keys(array_keys($v))) {
-                    $this->resopnseStatements($v[0], $res);
+                    $this->jsonStatements($v[0], $res);
                 } // 关联数组数组
                 else {
-                    $this->resopnseStatements($v, $res);
+                    $this->jsonStatements($v, $res);
                 }
             }
         }
