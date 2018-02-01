@@ -17,7 +17,8 @@ class CreateHostsTable extends Migration
             $table->increments('id');
             $table->integer('project_id')->comment('项目id');
             $table->string('name')->comment('域名');
-            $table->string('description')->comment('');
+            $table->string('description')->comment('描述');
+            $table->text('headers')->comment('请求头');
             $table->tinyInteger('is_default')->comment('是否默认')->defaut(0);
             $table->timestamps();
         });

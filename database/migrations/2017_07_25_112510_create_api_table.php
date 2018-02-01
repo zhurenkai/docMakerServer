@@ -20,6 +20,7 @@ class CreateApiTable extends Migration
             $table->integer('module_id');;
             $table->string('method')->default('');
             $table->string('path')->defaulf('');
+            $table->string('json_input')->defaulf('');
             $table->string('response_demo')->nullable();
             $table->string('description');
             $table->timestamps();

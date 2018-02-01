@@ -15,8 +15,14 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'auth:api'], function () {
     // 资源路由
-    Route::resource('key-statement', 'Api\KeyStatementController');
-    Route::resource('project-host', 'Host\ProjectHostController');
+    Route::group(['namespace'=>'Api'],function (){
+        Route::resource('key-statement', 'KeyStatementController');
+    });
+    Route::group(['namespace'=>'Host'],function (){
+        Route::resource('project-host', 'ProjectHostController');
+        Route::resource('host', 'HostController');
+    });
+
     Route::resource('user-project', 'Project\UserProjectController');
     Route::resource('module', 'Module\ModuleController');
     Route::resource('api', 'Api\ApiController');

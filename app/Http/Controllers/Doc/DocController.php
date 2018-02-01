@@ -15,8 +15,10 @@ class DocController extends Controller
         $query_params = $request->get('queryParam');
         $form_data = $request->get('formParam');
         $project_id = $request->get('project_id');
-        $doc['params'] = [];
+        $json_params = $request->get('jsonParam');
 
+        $doc['params'] = [];
+        // TODO 写的什么狗屎，待优化
         foreach ($query_params as $index => $value) {
             $info = $this->getStatement($value['key']);
             $info['required'] = $value['required'];
@@ -28,7 +30,10 @@ class DocController extends Controller
             $info['required'] = $value['required'];
             $doc['params'][] = $info;
         }
-
+        if($json_params){
+            $json_params = $this->jsonStatements($json_params);
+            $doc['params'] += $json_params;
+        }
         $response_data = $request->get('response');
         if (is_array($response_data)) {
             $doc['response'] = $this->jsonStatements($response_data);

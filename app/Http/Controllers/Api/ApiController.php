@@ -31,12 +31,12 @@ class ApiController extends Controller
         $description = $request->get('description');
         $search = compact('name','module_id','user_id');
         if(Api::where($search)->first()) {
-            return response()->error(1003);
+            return response()->error(6003);
         }
         $search['description'] = $description;
         $res = Api::create($search);
         if(!$res){
-            return response()->error(1004);
+            return response()->error(3004);
         }
         return response()->success($res);
     }
@@ -51,7 +51,7 @@ class ApiController extends Controller
             if ($res) {
                 return response()->success($res);
             } else {
-                return response()->error(1002);
+                return response()->error(4002);
             }
         }
 
@@ -64,7 +64,10 @@ class ApiController extends Controller
             return response()->error(1001);
         }
         $project_id = Module::find($api->module_id)->project_id;
-        $hosts = Host::where('project_id', $project_id)->get();
+        $hosts = Host::where('project_id', $project_id)->get()->all();
+        array_walk($hosts,function(&$item){
+            return $item->headers = json_decode($item->headers)?:[];
+        });
         $api->hosts = $hosts;
         $api->params;
         return response()->success($api);
@@ -80,11 +83,18 @@ class ApiController extends Controller
          $path = $request->get('path');
          $method = $request->get('method');
          $params = $request->get('params');
+         $host = $request->get('host');
+         $json_input = $request->get('json_input');
          if(!$path){
              return response()->error(2001);
          }
+        if(!$host){
+            return response()->error(2002);
+        }
          $api->path = $path;
          $api->method = $method;
+         $api->json_input = $json_input;
+         $api->host = $host;
          $api->save();
          list($update_params,$store_params) = array_separate($params,function($v){
              return isset($v['id']);

@@ -11,20 +11,17 @@ class UserProjectController extends Controller
     public function index()
     {
         $projects = $this->myProject();
-        foreach ($projects as $v) {
-            if ($v->modules) {
-                foreach ($v->modules as $module) {
-                    $module->apis;
-                }
-            }
-        }
         return response()->success($projects);
     }
 
     private function myProject()
     {
         $user_id = auth()->id();
-        return Project::where('user_id', $user_id)->get();
+        return Project::where('user_id', $user_id)
+            ->with(['modules'=>function($query){
+            $query->with('apis');
+        }])
+            ->get();
     }
 
     public function store(Request $request)
@@ -34,11 +31,11 @@ class UserProjectController extends Controller
         $description = $request->get('description');
         $data = compact('user_id', 'name', 'description');
         if (Project::where(['name' => $name, 'user_id' => $user_id])->first()) {
-            return response()->error(1003);
+            return response()->error(5003);
         }
         $res = Project::create($data);
         if (!$res) {
-            return response()->error(1004);
+            return response()->error(3004);
         }
         return response()->success($res);
 
