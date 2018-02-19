@@ -18,11 +18,13 @@ class CreateApiTable extends Migration
             $table->integer('user_id');
             $table->string('name');
             $table->integer('module_id');;
+            $table->string('host')->default('');
             $table->string('method')->default('');
-            $table->string('path')->defaulf('');
-            $table->string('json_input')->defaulf('');
+            $table->string('path')->default('');
+            $table->string('json_input')->default('');
             $table->string('response_demo')->nullable();
             $table->string('description');
+            $table->string('document')->nullable();
             $table->timestamps();
         });
     }

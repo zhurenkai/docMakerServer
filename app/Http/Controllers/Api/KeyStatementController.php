@@ -51,8 +51,6 @@ class KeyStatementController
     public function storeMany(Request $request)
     {
         $list = $request->get('list');
-       // return response()->success($list);
-//        dd($list[0]);
         $res = KeyStatement::insert($list);
         return response()->success($res);
     }

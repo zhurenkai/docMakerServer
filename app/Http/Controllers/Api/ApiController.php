@@ -70,6 +70,7 @@ class ApiController extends Controller
         });
         $api->hosts = $hosts;
         $api->params;
+        $api->document = json_decode($api->document);
         return response()->success($api);
 
     }

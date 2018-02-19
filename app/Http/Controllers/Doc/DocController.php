@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Doc;
 
+use App\Model\Api;
 use App\Model\KeyStatement;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -30,7 +31,7 @@ class DocController extends Controller
             $info['required'] = $value['required'];
             $doc['params'][] = $info;
         }
-        if($json_params){
+        if ($json_params) {
             $json_params = $this->jsonStatements($json_params);
             $doc['params'] += $json_params;
         }
@@ -79,11 +80,11 @@ class DocController extends Controller
             ->orderByDesc('weight')
             ->get();
         $ret = [
-            'key' => $key,
-            'statement' => '',
+            'key'               => $key,
+            'statement'         => '',
             'statement_options' => [],
-            'type' => '',
-            'required' => ''
+            'type'              => '',
+            'required'          => ''
         ];
         if (!$info->isEmpty()) {
             $ret['statement'] = $info[0]->statement;
@@ -97,17 +98,19 @@ class DocController extends Controller
     {
         $params = $request->get('params');
         $response = $request->get('response');
-            $project_id = $request->get('project_id',1);
-        $union = array_merge($params,$response);
-        $keys  = array_column($union,'key');
-        $union = array_combine($keys,$union);
+        $project_id = $request->get('project_id', 1);
+        $api_id = $request->get('api_id');
+        $this->updateApi($api_id,$params,$response);
+        $union = array_merge($params, $response);
+        $keys = array_column($union, 'key');
+        $union = array_combine($keys, $union);
         $user_id = auth()->id();
         // sql 结构 where aaa and ( (bbb and ccc) or (ddd and eee ))  查出用户这些键值对应的备注
-        $exists_keys = KeyStatement::where(['user_id'=>$user_id,'project_id'=>$project_id])
-            ->where(function($query)use($union){
-                foreach($union as $v){
-                    $query->orWhere(function($query)use($v){
-                        $query->Where(['key'=>$v['key'],'statement'=>$v['statement'],'type'=>$v['type']]);
+        $exists_keys = KeyStatement::where(['user_id' => $user_id, 'project_id' => $project_id])
+            ->where(function ($query) use ($union) {
+                foreach ($union as $v) {
+                    $query->orWhere(function ($query) use ($v) {
+                        $query->Where(['key' => $v['key'], 'statement' => $v['statement'], 'type' => $v['type']]);
                     });
 
                 }
@@ -115,20 +118,48 @@ class DocController extends Controller
             ->get()->keyBy('key')->toArray();
 
         // 对比
-        $not_exists = array_diff_key($union,$exists_keys);
-        $insert = array_map(function($v)use($user_id,$project_id){
+        $not_exists = array_diff_key($union, $exists_keys);
+        $insert = array_map(function ($v) use ($user_id, $project_id) {
             return [
-                'key'=>$v['key'],
-                'statement'=>$v['statement'],
-                'type'=>$v['type'] ?? 'varchar',
-                'user_id'=>$user_id,
-                'project_id'=>$project_id,
+                'key'        => $v['key'],
+                'statement'  => $v['statement'],
+                'type'       => $v['type'] ?? 'varchar',
+                'user_id'    => $user_id,
+                'project_id' => $project_id,
             ];
-        },$not_exists);
+        }, $not_exists);
         $res = KeyStatement::insert($insert);
-        if($res){
+        if ($res) {
             return response()->success('success');
         }
         return response()->error('更新失败');
+    }
+
+    private function updateApi($api_id, $params,$response)
+    {
+        $api = Api::find($api_id);
+        if(!$api){
+            return false;
+        }
+        $document = [
+            'params'   => array_map(function ($v) {
+                return [
+                    'key'       => $v['key'],
+                    'required'  => $v['required'],
+                    'statement' => $v['statement'],
+                    'type'      => $v['type'],
+                ];
+            }, $params),
+            'response' => array_map(function ($v) {
+                return [
+                    'key'       => $v['key'],
+                    'required'  => $v['required'],
+                    'statement' => $v['statement'],
+                    'type'      => $v['type'],
+                ];
+            }, $response)
+        ];
+        $api->document = json_encode($document);
+        $api->save();
     }
 }
