@@ -12,4 +12,7 @@ class Module extends Model
     {
         return $this->hasMany('App\Model\Api');
     }
+    public function project(){
+        return $this->belongsTo('App\Model\Project');
+    }
 }

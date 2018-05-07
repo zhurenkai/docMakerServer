@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-        Response::macro('success', function ($data) {
+        Response::macro('success', function ($data=true) {
             return Response::json(['code' => 0, 'data' => $data]);
         });
 

@@ -20,3 +20,6 @@ Route::get('/test', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['namespace'=>'Doc','prefix'=>'doc'],function(){
+    Route::get('markdown', 'DocController@index')->name('home');
+});

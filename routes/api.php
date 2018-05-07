@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
     Route::group(['prefix'=>'doc','namespace'=>'Doc'],function(){
         Route::post('generate','DocController@generate');
+        Route::post('markdown','DocController@saveMarkDownDoc');
     });
     Route::group(['prefix'=>'key','namespace'=>'Api'],function(){
         Route::post('store-many','KeyStatementController@storeMany');

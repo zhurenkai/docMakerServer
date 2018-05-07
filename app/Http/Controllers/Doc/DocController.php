@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Doc;
 
 use App\Model\Api;
 use App\Model\KeyStatement;
+use App\Model\Markdown;
+use App\Model\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class DocController extends Controller
 {
@@ -100,7 +103,7 @@ class DocController extends Controller
         $response = $request->get('response');
         $project_id = $request->get('project_id', 1);
         $api_id = $request->get('api_id');
-        $this->updateApi($api_id,$params,$response);
+        $this->updateApi($api_id, $params, $response);
         $union = array_merge($params, $response);
         $keys = array_column($union, 'key');
         $union = array_combine($keys, $union);
@@ -135,10 +138,10 @@ class DocController extends Controller
         return response()->error('更新失败');
     }
 
-    private function updateApi($api_id, $params,$response)
+    private function updateApi($api_id, $params, $response)
     {
         $api = Api::find($api_id);
-        if(!$api){
+        if (!$api) {
             return false;
         }
         $document = [
@@ -161,5 +164,65 @@ class DocController extends Controller
         ];
         $api->document = json_encode($document);
         $api->save();
+    }
+
+    public function saveMarkDownDoc(Request $request)
+    {
+        $content = $request->get('content');
+        $api_id = $request->get('api_id');
+        $api = Api::find($api_id);
+        if(!$api){
+            return response()->error(1001);
+        }
+        $markdown = Markdown::where('api_id',$api_id)->first();
+        $user_id = auth()->id();
+        $user_name = auth()->user()->name;
+        if(!$markdown){
+            $markdown = new Markdown();
+            $markdown->creator_id = $user_id;
+            $markdown->creator_name = $user_name;
+        }
+        $markdown->api_id = $api_id;
+        $markdown->last_updater_id = $user_id;
+        $markdown->last_updater_name = $user_name;
+        $markdown->content = $content;
+        $markdown->save();
+        $this->buildMarkdown($markdown);
+        return response()->success();
+    }
+
+    public function buildMarkdown($markdown)
+    {
+        $config = 'site_name: MkLorum
+pages:
+    - 模块1: index.md
+    - 模块2: aaa.md
+theme: readthedocs
+';
+        $api = $markdown->api;
+//        dd($api);
+        $module = $api->module;
+        $project = $module->project;
+        $path = "$project->id";
+        if(Storage::exists($path)){
+            $shell_script = '';
+        }
+    }
+
+    public function index(Request $request){
+        $project_id = $request->get('project_id');
+        $project = Project::find($project_id);
+//        dd($project);
+        if(!$project){
+            return response()->error(1002);
+        }
+
+        $data = Project::where('id',$project_id)->with(['modules'=>function($query){
+            $query->with(['apis'=>function($query){
+                $query->with('markdown');
+            }]);
+        }])->first();
+//        dd($data);
+        return view('markdownDoc',['data'=>$data]);
     }
 }

@@ -6,7 +6,7 @@
                     <div class="panel-heading">Example Component</div>
 
                     <div class="panel-body">
-                       妈的
+
                     </div>
                 </div>
             </div>

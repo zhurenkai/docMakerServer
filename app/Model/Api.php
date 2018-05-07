@@ -11,4 +11,12 @@ class Api extends Model
     public function params(){
         return $this->hasMany('App\Model\Param');
     }
+
+    public function module(){
+        return $this->belongsTo('App\Model\Module');
+    }
+
+    public function markdown(){
+        return $this->hasOne('App\Model\Markdown');
+    }
 }
