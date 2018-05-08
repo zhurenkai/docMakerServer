@@ -31,7 +31,7 @@ class ApiController extends Controller
         $description = $request->get('description');
         $search = compact('name','module_id','user_id');
         if(Api::where($search)->first()) {
-            return response()->error(6003);
+            return response()->error(5003);
         }
         $search['description'] = $description;
         $res = Api::create($search);

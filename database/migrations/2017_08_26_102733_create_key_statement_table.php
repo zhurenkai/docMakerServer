@@ -20,7 +20,7 @@ class CreateKeyStatementTable extends Migration
             $table->string('type')->comment('类型');
             $table->string('user_id')->comment('用户id');
             $table->string('project_id')->comment('项目id');
-            $table->integer('weight')->comment('比重');
+            $table->integer('weight')->default(0)->comment('比重');
             $table->timestamps();
         });
     }

@@ -24,7 +24,7 @@ class CreateApiTable extends Migration
             $table->string('json_input')->default('');
             $table->string('response_demo')->nullable();
             $table->string('description');
-            $table->string('document')->nullable();
+            $table->longText('document')->nullable();
             $table->timestamps();
         });
     }

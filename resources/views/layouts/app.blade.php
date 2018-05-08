@@ -37,6 +37,12 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         &nbsp;
+                                   <li>
+                            <a class="menu" href="{{ url('/home') }}">
+                                项目列表
+                            </a>
+                                   </li>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->

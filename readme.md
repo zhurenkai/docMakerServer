@@ -8,8 +8,11 @@
 >
 >$ php artisan passport:install
 >
->去数据库找到oauth_client 找到password_client 为1的那条，复制secret 和id 
-粘贴到vue中docMakerClient/frontend/src/components/auth 中。（详情查看laravel官方文档passport）
+>$ chmod -R 777 bootstrap/cache/ storage/
+
+
+>去数据库找到oauth_client 找到password_client 为1的那条(第二条)，复制secret 和id 
+粘贴到vue中docMakerClient/config/index.js 中。（详情查看laravel官方文档passport）
 >
 >进入laravel根url，选择register 注册用户
 >在vue中登录即可使用
@@ -25,7 +28,7 @@ server {
 set $htdocs  {path to dist after build};
 root $htdocs;
   location /client-api/ {
-        proxy_pass http://{host of docMakerClient }/;
+        proxy_pass http://{host of docMakerClient/backend }/;
         }
 
     location /api/ {
