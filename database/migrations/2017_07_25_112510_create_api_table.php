@@ -21,7 +21,7 @@ class CreateApiTable extends Migration
             $table->string('host')->default('');
             $table->string('method')->default('');
             $table->string('path')->default('');
-            $table->string('json_input')->default('');
+            $table->string('json_input')->nullable();
             $table->string('response_demo')->nullable();
             $table->string('description');
             $table->longText('document')->nullable();

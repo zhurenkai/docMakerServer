@@ -24,13 +24,13 @@ class DocController extends Controller
         $doc['params'] = [];
         // TODO 写的什么狗屎，待优化
         foreach ($query_params as $index => $value) {
-            $info = $this->getStatement($value['key']);
+            $info = $this->getStatement($value['key'],$value['value']);
             $info['required'] = $value['required'];
             $doc['params'][] = $info;
         }
 
         foreach ($form_data as $index => $value) {
-            $info = $this->getStatement($value['name']);
+            $info = $this->getStatement($value['name'],$value['value']);
             $info['required'] = $value['required'];
             $doc['params'][] = $info;
         }
@@ -56,9 +56,10 @@ class DocController extends Controller
     {
 
         foreach ($response_data as $k => $v) {
+
             // 用key过滤重复的参数
             if (!key_exists($k, $res) && !is_int($k)) {
-                $res[$k] = $this->getStatement($k);
+                $res[$k] = $this->getStatement($k,$v);
             }
             // 数组的情况
             if (is_array($v)) {
@@ -74,7 +75,7 @@ class DocController extends Controller
         return array_values($res);
     }
 
-    private function getStatement($key)
+    private function getStatement($key,$value)
     {
         $info = KeyStatement::where('key', $key)
             ->orderByRaw('user_id=' . auth()->id() . ' desc')
@@ -82,11 +83,22 @@ class DocController extends Controller
 //                ->orderByRaw('project_id='.$project_id.' desc')
             ->orderByDesc('weight')
             ->get();
+        $type = gettype($value);
+        switch ($type){
+            case 'array':
+                if (array_keys($value) != array_keys(array_keys($value))){
+                    $type = 'object';
+                }
+                break;
+            case 'NULL':
+                $type = 'string';
+                break;
+        }
         $ret = [
             'key'               => $key,
             'statement'         => '',
             'statement_options' => [],
-            'type'              => '',
+            'type'              => $type,
             'required'          => ''
         ];
         if (!$info->isEmpty()) {

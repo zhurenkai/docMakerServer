@@ -79,12 +79,11 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    DocMaker
+                    // TODO
                 </div>
 
                 <div class="links">
-                    <a href="{{url('/document')}}">Documentation</a>
-                    <a href="https://github.com/IdleThoughtss/docMakerServer" target="_blank">GitHub</a>
+
                 </div>
             </div>
         </div>

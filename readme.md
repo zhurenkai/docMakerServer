@@ -1,8 +1,10 @@
-##install
+###安装服务端
 
 >$ composer install
 >
 >config .env
+>
+>php artisan key:generate
 >
 >$ php artisan migrate
 >
@@ -14,8 +16,23 @@
 >去数据库找到oauth_client 找到password_client 为1的那条(第二条)，复制secret 和id 
 粘贴到vue中docMakerClient/config/index.js 中。（详情查看laravel官方文档passport）
 >
+
+###安装前端
+
+> 如果需要请求本地接口需要安装在本地
+
+```
+https://github.com/IdleThoughtss/docMakerClient
+```
+> cd docMakerClient/frontend/
+>
+> npm install
+>
+> npm run build
+>
 >进入laravel根url，选择register 注册用户
->在vue中登录即可使用
+>
+>在前端中登录即可使用
 
 
 
