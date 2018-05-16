@@ -1,3 +1,7 @@
+[demo-server](http://docmaker-server.randqun.com/)
+
+[demo-client](http://docmaker.randqun.com/)
+
 ###安装服务端
 
 >$ composer install
@@ -98,3 +102,9 @@ server {
 ####设置
 
 >进入设置界面可以为每个项目设置hosts，在此后的使用中可以在host的下拉菜单中选择
+
+
+####其他
+>进入docMakerClient中的backend文件夹配置config中数据库链接参数，服务端的域名，修改Authorization(在查看network中的headers)，这一步最麻烦但是非常重要
+>执行 php -f import.php 
+>可以将mysql数据库中对字段的注释导入，可以更快的进入使用的状态
