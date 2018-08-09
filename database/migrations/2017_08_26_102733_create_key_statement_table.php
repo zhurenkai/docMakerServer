@@ -18,6 +18,7 @@ class CreateKeyStatementTable extends Migration
             $table->string('key')->comment('字段名');
             $table->string('statement')->comment('描述');
             $table->string('type')->comment('类型');
+            $table->string('key_type_state_hash')->comment('key type statement 拼接后的md5')->index();
             $table->string('user_id')->comment('用户id');
             $table->string('project_id')->comment('项目id');
             $table->integer('weight')->default(0)->comment('比重');

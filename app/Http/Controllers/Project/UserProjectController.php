@@ -10,18 +10,21 @@ class UserProjectController extends Controller
 {
     public function index()
     {
-        $projects = $this->myProject();
+        $user_id = auth()->id();
+        $projects = Project::where('user_id', $user_id)->get();
         return response()->success($projects);
     }
 
-    private function myProject()
+
+    public function projectsWithApi()
     {
         $user_id = auth()->id();
-        return Project::where('user_id', $user_id)
+        $projects = Project::where('user_id', $user_id)
             ->with(['modules'=>function($query){
             $query->with('apis');
         }])
             ->get();
+        return response()->success($projects);
     }
 
     public function store(Request $request)

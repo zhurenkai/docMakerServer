@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('project-host', 'ProjectHostController');
         Route::resource('host', 'HostController');
     });
-
+    Route::get('projects-with-api','Project\UserProjectController@projectsWithApi');
     Route::resource('user-project', 'Project\UserProjectController');
     Route::resource('module', 'Module\ModuleController');
     Route::resource('api', 'Api\ApiController');
