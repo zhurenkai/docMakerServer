@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::resource('module', 'Module\ModuleController');
     Route::resource('api', 'Api\ApiController');
     Route::resource('document', 'Doc\DocController');
+    Route::resource('db-config', 'DBInfo\ConfigController');
 
     //非资源路由
     Route::group(['namespace'=>'Auth'], function () {
@@ -36,8 +37,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('generate','DocController@generate');
         Route::post('markdown','DocController@saveMarkDownDoc');
     });
-    Route::group(['prefix'=>'key','namespace'=>'Api'],function(){
+    Route::group(['prefix'=>'comment','namespace'=>'Api'],function(){
         Route::post('store-many','KeyStatementController@storeMany');
+        Route::get('hash','KeyStatementController@getHash');
     });
 });
 

@@ -51,8 +51,37 @@ class KeyStatementController
     public function storeMany(Request $request)
     {
         $list = $request->get('list');
-        $res = KeyStatement::insert($list);
+        $project_id = $request->get('project_id');
+        $user_id = auth()->id();
+        $exists_hash = KeyStatement::where(['project_id'=>$project_id,'user_id'=>$user_id])
+            ->select('key_type_state_hash')
+            ->get()
+          ->pluck('key_type_state_hash')->toArray();
+        $list_new = array_filter($list,function($item)use($exists_hash){
+            return !in_array($item['hash'],$exists_hash);
+        });
+        $data = array_map(function($item)use($user_id,$project_id){
+            return [
+                'key'=>$item['key'],
+                'statement'=>$item['statement'],
+                'type'=>$item['type'],
+                'user_id'=>$user_id,
+                'project_id'=>$project_id,
+                'key_type_state_hash'=>$item['hash'],
+            ];
+        },$list_new);
+        $res = KeyStatement::insert($data);
         return response()->success($res);
+    }
+
+    public function getHash(Request $request){
+        $project_id = $request->get('project_id');
+        $user_id = auth()->id();
+        $exists_hash = KeyStatement::where(['project_id'=>$project_id,'user_id'=>$user_id])
+            ->select('key_type_state_hash')
+            ->get()
+            ->pluck('key_type_state_hash')->toArray();
+        return response()->success($exists_hash);
     }
 
 }

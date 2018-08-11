@@ -20,7 +20,7 @@ class CreateDatabaseConfingsTable extends Migration
             $table->string('host')->comment('创建者姓名');
             $table->integer('port')->comment('创建者姓名');
             $table->string('username')->comment('用户名');
-            $table->string('password')->comment('密码');
+            $table->string('password')->nullable()->comment('密码');
             $table->string('databases')->comment('数据库');
             $table->integer('creator_id')->comment('创建者id');
             $table->string('last_updater_name')->comment('最后更新者姓名');

@@ -16,7 +16,7 @@ class CreateKeyStatementTable extends Migration
         Schema::create('key_statements', function (Blueprint $table) {
             $table->increments('id');
             $table->string('key')->comment('字段名');
-            $table->string('statement')->comment('描述');
+            $table->string('statement',300)->comment('描述');
             $table->string('type')->comment('类型');
             $table->string('key_type_state_hash')->comment('key type statement 拼接后的md5')->index();
             $table->string('user_id')->comment('用户id');
