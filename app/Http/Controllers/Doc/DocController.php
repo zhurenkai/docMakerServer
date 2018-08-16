@@ -121,13 +121,13 @@ class DocController extends Controller
         $union = array_combine($keys, $union);
         $user_id = auth()->id();
         // sql 结构 where aaa and ( (bbb and ccc) or (ddd and eee ))  查出用户这些键值对应的备注
+        // todo 根据hash查出键值对
         $exists_keys = KeyStatement::where(['user_id' => $user_id, 'project_id' => $project_id])
             ->where(function ($query) use ($union) {
                 foreach ($union as $v) {
                     $query->orWhere(function ($query) use ($v) {
                         $query->Where(['key' => $v['key'], 'statement' => $v['statement'], 'type' => $v['type']]);
                     });
-
                 }
             })
             ->get()->keyBy('key')->toArray();
@@ -138,9 +138,10 @@ class DocController extends Controller
             return [
                 'key'        => $v['key'],
                 'statement'  => $v['statement'],
-                'type'       => $v['type'] ?? 'varchar',
+                'type'       => $v['type'] ?? 'string',
                 'user_id'    => $user_id,
                 'project_id' => $project_id,
+                'key_type_state_hash'=>md5($v['key'].$v['type'].$v['statement'])
             ];
         }, $not_exists);
         $res = KeyStatement::insert($insert);
