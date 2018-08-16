@@ -17,9 +17,8 @@
 >$ chmod -R 777 bootstrap/cache/ storage/
 
 
->去数据库找到oauth_client 找到password_client 为1的那条(第二条)，复制secret 和id 
-粘贴到vue中docMakerClient/config/index.js 中。（详情查看laravel官方文档passport）
->
+>去数据库表oauth_client 找到password_client为2的那一条id和secret便是  [docMakerClient](https://github.com/zhurenkai/docMakerClient) 中需要的配置
+
 
 ####发起一次请求
 >进入工作界面,创建项目模块，接口
@@ -44,8 +43,4 @@
 
 >进入设置界面可以为每个项目设置hosts，在此后的使用中可以在host的下拉菜单中选择
 
-
-####其他
->进入docMakerClient中的backend文件夹配置config中数据库链接参数，服务端的域名，修改Authorization(在查看network中的headers)，这一步最麻烦但是非常重要
->执行 php -f import.php 
->可以将mysql数据库中对字段的注释导入，可以更快的进入使用的状态
+>可以导入本地数据库字段的注释，可以直接根据自己看注释匹配返回字段说明
