@@ -2,7 +2,7 @@
 
 [demo-client](http://docmaker.randqun.com/)
 
-###安装服务端
+#### 安装
 
 >$ composer install
 >
@@ -20,7 +20,7 @@
 >去数据库表oauth_client 找到password_client为2的那一条id和secret便是  [docMakerClient](https://github.com/zhurenkai/docMakerClient) 中需要的配置
 
 
-####发起一次请求
+#### 发起一次请求
 >进入工作界面,创建项目模块，接口
 
 >选择method,host,uri ,填写请求参数（支持formdata和json），填写header 选择send
@@ -39,7 +39,7 @@
 
 >登录后台即可以看见文档(服务端)
 
-####设置
+#### 设置
 
 >进入设置界面可以为每个项目设置hosts，在此后的使用中可以在host的下拉菜单中选择
 
