@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Api extends Model
 {
-    protected $fillable = ['name','project_id','module_id','user_id','description'];
+    protected $fillable = ['name','project_id','module_id','user_id','description','host','path','method','json_input'];
 
     public function params(){
         return $this->hasMany('App\Model\Param');
