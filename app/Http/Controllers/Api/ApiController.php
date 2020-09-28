@@ -42,7 +42,7 @@ class ApiController extends Controller
 
         if ($curl_code) {
             $api_info = $this->processCurlCode($curl_code);
-            $search['host'] = $api_info['host'];
+            $search['host'] = $api_info[ 'host'];
             $search['path'] = $api_info['path'];
             $search['method'] = $api_info['method'];
             $search['json_input'] = $api_info['json_input'];
