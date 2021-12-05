@@ -37,10 +37,10 @@
 
     function viewDoc (doc) {
     if(doc){
-      document.getElementById('docContent').innerHTML= marked(doc.content);
+      document.getElementById('docContent').innerHTML= marked.parse(doc.content);
     }
     else{
-      document.getElementById('docContent').innerHTML= marked('## 暂时没有文档\n\n >让你们后端快点写');
+      document.getElementById('docContent').innerHTML= marked.parse('## 暂时没有文档\n\n >让你们后端快点写');
     }
     }
 </script>
